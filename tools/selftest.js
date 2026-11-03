@@ -183,6 +183,20 @@ module.exports = function selftest(win, dir) {
       const pages = await job(longPdf.out, 'doc', 'jpg', { dpi: 72 });
       check('PDF mit mehreren Seiten', !pages.error && fs.statSync(pages.out).isDirectory() && fs.readdirSync(pages.out).length > 1, pages.error || fs.readdirSync(pages.out).join(','));
 
+      // Echte Word- und iPhone-Dateien lassen sich mit FFmpeg nicht erzeugen, deshalb liegen sie als Beispiele bei
+      const docx = path.join(__dirname, 'fixtures', 'test.docx');
+      if (fs.existsSync(docx)) {
+        const dPdf = await job(docx, 'doc', 'pdf', { page: 'a4' });
+        check('DOCX zu PDF', isPdf(dPdf), dPdf.error || `${dPdf.size} B`);
+        const dHtml = await job(docx, 'doc', 'html', {});
+        check('DOCX zu HTML', !dHtml.error && /Fetter Titel/.test(fs.readFileSync(dHtml.out, 'utf8')) && /<strong>/.test(fs.readFileSync(dHtml.out, 'utf8')), dHtml.error || '');
+        const dTxt = await job(docx, 'doc', 'txt', {});
+        check('DOCX zu Text', !dTxt.error && /äöü/.test(fs.readFileSync(dTxt.out, 'utf8')), dTxt.error || '');
+        const dMd = await job(docx, 'doc', 'md', {});
+        check('DOCX zu Markdown', !dMd.error && /\*\*Fetter Titel\*\*/.test(fs.readFileSync(dMd.out, 'utf8')), dMd.error || '');
+        await expectStreams('HEIC zu JPG', await job(path.join(__dirname, 'fixtures', 'test.heic'), 'image', 'jpg', i), (x) => x.video.w === 640 && x.video.h === 480);
+      }
+
       // ---------------- Dateinamen und Abbruch
       const a1 = await job(wav, 'audio', 'mp3', a, { outDir: IN });
       const a2 = await job(wav, 'audio', 'mp3', a, { outDir: IN });
