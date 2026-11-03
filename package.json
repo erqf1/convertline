@@ -1,0 +1,160 @@
+{
+  "name": "convertline",
+  "productName": "Convertline",
+  "version": "1.0.0",
+  "description": "Videos, Musik, Bilder und Dokumente per Drag and Drop stapelweise umwandeln.",
+  "main": "src/main.js",
+  "private": true,
+  "desktopName": "win.mert.Convertline",
+  "scripts": {
+    "bundle": "node build.mjs",
+    "start": "node build.mjs && electron .",
+    "ffmpeg": "python tools/fetch-ffmpeg.py",
+    "build": "node build.mjs && electron-builder",
+    "build:win": "node build.mjs && electron-builder -w"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "erqf1",
+    "email": "erqf1@users.noreply.github.com"
+  },
+  "devDependencies": {
+    "electron": "44.9.3",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "mammoth": "^1.9.0",
+    "marked": "^15.0.0",
+    "pdfjs-dist": "^4.10.38",
+    "turndown": "^7.2.0"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
+  },
+  "allowScripts": {
+    "electron@44.9.3": true,
+    "esbuild@0.28.2": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erqf1/convertline.git"
+  },
+  "engines": {
+    "node": ">=22.2"
+  },
+  "build": {
+    "appId": "win.mert.Convertline",
+    "productName": "Convertline",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/*.js",
+      "src/shared/**/*",
+      "src/dist/**/*",
+      "src/renderer/index.html",
+      "src/renderer/pdf.html",
+      "src/renderer/style.css",
+      "src/renderer/dist/**/*",
+      "assets/icon.png",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/${os}-${arch}",
+        "to": "ffmpeg"
+      }
+    ],
+    "afterPack": "tools/afterPack.js",
+    "publish": {
+      "provider": "github",
+      "owner": "erqf1",
+      "repo": "convertline"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "artifactName": "Convertline-Setup-${version}.${ext}",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "Convertline-${version}-portable.${ext}"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "category": "AudioVideo",
+      "syncDesktopName": true,
+      "synopsis": "Videos, Musik, Bilder und Dokumente stapelweise umwandeln",
+      "artifactName": "Convertline-${version}-${arch}.${ext}",
+      "desktop": {
+        "entry": {
+          "Keywords": "convert;converter;video;audio;image;ffmpeg;mp4;mp3;"
+        }
+      },
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "pacman",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "deb": {
+      "artifactName": "Convertline-${version}-amd64.${ext}"
+    },
+    "pacman": {
+      "artifactName": "Convertline-${version}-x86_64.${ext}"
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.video",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Convertline-${version}-mac-${arch}.${ext}"
+    }
+  }
+}

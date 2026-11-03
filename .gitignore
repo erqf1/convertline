@@ -1,0 +1,7 @@
+node_modules/
+dist/
+src/dist/
+src/renderer/dist/
+vendor/
+*.log
+site/
