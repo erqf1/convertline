@@ -1,7 +1,7 @@
 {
   "name": "convertline",
   "productName": "Convertline",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Videos, Musik, Bilder und Dokumente per Drag and Drop stapelweise umwandeln.",
   "main": "src/main.js",
   "private": true,
@@ -19,7 +19,7 @@
     "email": "erqf1@users.noreply.github.com"
   },
   "devDependencies": {
-    "electron": "44.9.3",
+    "electron": "43.8.7",
     "electron-builder": "^26.18.0",
     "esbuild": "^0.28.2",
     "mammoth": "^1.9.0",
@@ -31,7 +31,7 @@
     "electron-updater": "^6.8.11"
   },
   "allowScripts": {
-    "electron@44.9.3": true,
+    "electron@43.8.7": true,
     "esbuild@0.28.2": true
   },
   "repository": {
@@ -154,7 +154,10 @@
           ]
         }
       ],
-      "artifactName": "Convertline-${version}-mac-${arch}.${ext}"
+      "artifactName": "Convertline-${version}-mac-${arch}.${ext}",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "minimumSystemVersion": "12.0"
     }
   }
 }
